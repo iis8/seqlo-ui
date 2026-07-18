@@ -1,0 +1,32 @@
+// ============================================================
+// seqlo-ui 默认主题
+//
+// 消费方有两种集成方式：
+//   方式 A：完全使用库默认主题
+//     在 main.ts 中：import '@seqlo/ui/styles/theme.scss'
+//
+//   方式 B：复用宿主已有的 CSS 变量（推荐，CRM 项目走这条路）
+//     不导入此文件，宿主已有的 --background-white / --primary-color 等
+//     会通过 _variables.scss 中的 fallback 自动生效。
+//
+//   方式 C：在宿主 :root 中覆盖 --seqlo-xxx 以定制
+//     :root { --seqlo-primary-color: #your-brand; }
+// ============================================================
+
+:root {
+  // 颜色
+  --seqlo-primary-color: #4361EE;
+  --seqlo-primary-color-06: rgba(67, 97, 238, 0.06);
+  --seqlo-primary-color-08: rgba(67, 97, 238, 0.08);
+  --seqlo-primary-color-10: rgba(67, 97, 238, 0.10);
+  --seqlo-text-secondary: #9CA3AF;
+  --seqlo-border-color-light: #F3F4F6;
+  --seqlo-background-white: #FFFFFF;
+  --seqlo-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  // 间距与圆角
+  --seqlo-spacing-sm: 8px;
+  --seqlo-spacing-md: 16px;
+  --seqlo-spacing-lg: 24px;
+  --seqlo-radius-lg: 12px;
+}

@@ -1,0 +1,296 @@
+// ============================================================
+//  seqlo-ui 主样式
+//
+//  所有主题变量都使用 CSS 自定义属性（CSS Variables），
+//  优先级：--seqlo-xxx > --xxx（宿主变量） > 硬编码默认值
+//  这样可以：
+//    1. 完全自包含，不依赖宿主注入 SCSS 变量
+//    2. 与宿主主题无缝衔接（宿主有 --background-white 等就自动复用）
+//    3. 运行时可动态切换主题
+// ============================================================
+
+// ============================================================
+//  核心：滚动容器布局（单层/多层通用）
+// ============================================================
+.scroll-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &__header {
+    flex-shrink: 0;
+  }
+
+  &__content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;      // 单层时滚动，嵌套时因无溢出而不滚动
+    position: relative;
+  }
+
+  &__footer {
+    flex-shrink: 0;
+  }
+
+  // 防御性重置：当作为子容器嵌套时，消除外边距并开启 border-box
+  .scroll-container {
+    margin: 0;
+    box-sizing: border-box;
+  }
+}
+
+// ============================================================
+//  中间层：table-wrapper（负责占据空间，但不滚动）
+// ============================================================
+.table-wrapper {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;      // 强制不滚动，滚动权完全交给内部
+  // 如果你希望外层有间距，可以在这里加 padding，但要注意叠加问题
+  // 推荐不加 padding，交给内层 .table-container 处理
+}
+
+// ============================================================
+//  卡片容器：你的 UI 美化层（集成 Flex 布局）
+// ============================================================
+.table-container {
+  // 1. 必须继承 Flex 列布局（因为可能没有 .scroll-container 类？但你的模板里有，为了保险显式声明）
+  display: flex;
+  flex-direction: column;
+  height: 100%;          // 撑满父级
+
+  // 2. 核心：让内边距和边框包含在 100% 内，绝不溢出
+  box-sizing: border-box;
+
+  // 3. 视觉美化
+  background: var(--seqlo-background-white, var(--background-white, #FFFFFF));
+  padding: var(--seqlo-spacing-lg, var(--spacing-lg, 24px));
+  border-radius: var(--seqlo-radius-lg, var(--radius-lg, 12px));
+  box-shadow: var(--seqlo-shadow-sm, var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05)));
+  border: 1px solid var(--seqlo-border-color-light, var(--border-color-light, #F3F4F6));
+
+  // 4. 如果内部滚动容器（__content）需要和边框保持距离，上面 padding 已经做到了。
+  // 内部的 .scroll-container__content 会自动填满扣除 padding 后的剩余空间。
+}
+
+// ============================================================
+//  分页栏微调（可选）
+// ============================================================
+.pagination-container {
+  flex-shrink: 0;
+  padding: 12px 0 0 0;   // 给表格和分页之间加点间距
+  background: transparent; // 继承父级背景
+}
+
+.table-container {
+  background: var(--seqlo-background-white, var(--background-white, #FFFFFF));
+  padding: var(--seqlo-spacing-lg, var(--spacing-lg, 24px));
+  border-radius: var(--seqlo-radius-lg, var(--radius-lg, 12px));
+  box-shadow: var(--seqlo-shadow-sm, var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05)));
+  border: 1px solid var(--seqlo-border-color-light, var(--border-color-light, #F3F4F6));
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--seqlo-spacing-lg, var(--spacing-lg, 24px));
+  flex-wrap: wrap;
+  gap: var(--seqlo-spacing-sm, var(--spacing-sm, 8px));
+}
+
+.refresh-hint-container {
+  display: flex;
+  align-items: center;
+
+  .refresh-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(var(--el-color-warning), 0.1);
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--el-color-warning);
+
+    .el-icon {
+      font-size: 16px;
+    }
+
+    .el-button {
+      padding: 0 8px;
+      margin-left: 8px;
+    }
+  }
+}
+// ==================== 表格工具栏 ====================
+.table-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--seqlo-spacing-md, var(--spacing-md, 16px));
+  gap: var(--seqlo-spacing-sm, var(--spacing-sm, 8px));
+}
+.table-searchbar {
+  display: flex;
+  align-items: center;
+  gap: var(--seqlo-spacing-sm, var(--spacing-sm, 8px));
+  width: 100%;
+}
+.table-searchbar__content {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--seqlo-spacing-sm, var(--spacing-sm, 8px));
+  width: 100%;
+}
+.table-searchbar__left-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--seqlo-spacing-sm, var(--spacing-sm, 8px));
+}
+.table-searchbar__right-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--seqlo-spacing-sm, var(--spacing-sm, 8px));
+}
+// ==================== MTable 列选择器样式 ====================
+.right-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 32px;
+  cursor: pointer;
+  color: var(--seqlo-text-secondary, var(--text-secondary, #9CA3AF));
+  transition: all 0.2s;
+
+  &:hover {
+    color: var(--seqlo-primary-color, var(--primary-color, #4361EE));
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
+
+  .el-icon {
+    font-size: 18px;
+  }
+}
+
+.column-dropdown-popper {
+  padding: 0 !important;
+  min-width: 260px !important;
+  max-width: 320px !important;
+  max-height: 380px !important;
+  overflow: hidden !important;
+}
+
+.column-dropdown-popper .el-dropdown-menu {
+  padding: 0;
+  min-width: 260px;
+  max-height: 380px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-dropdown-menu {
+  padding: 0;
+  min-width: 260px;
+  max-height: 380px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--seqlo-border-color-light, var(--border-color-light, #F3F4F6));
+}
+
+.column-dropdown-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.column-dropdown-count {
+  font-size: 12px;
+  color: var(--seqlo-text-secondary, var(--text-secondary, #9CA3AF));
+  min-width: 50px;
+  text-align: right;
+}
+
+.column-dropdown-divider {
+  height: 8px;
+}
+
+.column-dropdown-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.column-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 2px 6px;
+  gap: 8px;
+}
+
+.column-dropdown-item:hover:not(.disabled) {
+  background: var(--seqlo-primary-color-06, rgba(67, 97, 238, 0.06));
+}
+
+.column-dropdown-item.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.column-drag-handle {
+  cursor: grab;
+  padding: 4px 6px;
+  border-radius: 4px;
+  opacity: 0.4;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  width: 28px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--seqlo-text-secondary, var(--text-secondary, #9CA3AF));
+}
+
+.column-drag-handle:hover {
+  opacity: 1;
+  color: var(--seqlo-primary-color, var(--primary-color, #4361EE));
+  background: var(--seqlo-primary-color-08, rgba(67, 97, 238, 0.08));
+}
+
+.column-drag-handle:active {
+  cursor: grabbing;
+}
+
+.column-drag-ghost {
+  opacity: 0.5;
+  background: var(--seqlo-primary-color-10, rgba(67, 97, 238, 0.10));
+  border-radius: 4px;
+}
+
+.column-drag-drag {
+  opacity: 1;
+  background: var(--seqlo-primary-color-08, rgba(67, 97, 238, 0.08));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

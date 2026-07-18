@@ -1,0 +1,25 @@
+// ============================================================
+// seqlo-ui SCSS 变量映射
+// 所有变量都解析为 CSS 变量，并提供多重 fallback：
+//   1. --seqlo-xxx（库自定义主题，优先级最高）
+//   2. --xxx（通用变量名，便于复用宿主已有变量）
+//   3. 硬编码默认值（保证独立可用）
+// ============================================================
+
+// 颜色
+$background-white: var(--seqlo-background-white, var(--background-white, #FFFFFF)) !default;
+$border-color-light: var(--seqlo-border-color-light, var(--border-color-light, #F3F4F6)) !default;
+$text-secondary: var(--seqlo-text-secondary, var(--text-secondary, #9CA3AF)) !default;
+$primary-color: var(--seqlo-primary-color, var(--primary-color, #4361EE)) !default;
+$shadow-sm: var(--seqlo-shadow-sm, var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05))) !default;
+
+// 主色的半透明变体（rgba 不能直接接收 var()，因此单独定义）
+$primary-color-06: var(--seqlo-primary-color-06, rgba(67, 97, 238, 0.06)) !default;
+$primary-color-08: var(--seqlo-primary-color-08, rgba(67, 97, 238, 0.08)) !default;
+$primary-color-10: var(--seqlo-primary-color-10, rgba(67, 97, 238, 0.10)) !default;
+
+// 间距与圆角
+$spacing-sm: var(--seqlo-spacing-sm, 8px) !default;
+$spacing-md: var(--seqlo-spacing-md, 16px) !default;
+$spacing-lg: var(--seqlo-spacing-lg, 24px) !default;
+$radius-lg: var(--seqlo-radius-lg, 12px) !default;
