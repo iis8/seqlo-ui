@@ -4,6 +4,14 @@
   "description": "Seqlo UI - Vue 3 + Element Plus 业务组件库（MTable / MForm / MDescriptions / SearchBar / FieldEditor）",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iis8/seqlo-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iis8/seqlo-ui/issues"
+  },
+  "homepage": "https://github.com/iis8/seqlo-ui#readme",
   "files": [
     "dist",
     "src"
