@@ -1,6 +1,6 @@
 {
   "name": "@seqlo/ui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Seqlo UI - Vue 3 + Element Plus 业务组件库（MTable / MForm / MDescriptions / SearchBar / FieldEditor）",
   "type": "module",
   "license": "MIT",
