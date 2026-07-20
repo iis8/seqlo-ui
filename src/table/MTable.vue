@@ -607,8 +607,8 @@ const {
 } = useBatchActions({
   api: props.api,
   rowKey: props.rowKey,
-  batchEditableColumns: batchEditableColumns.value,
-  selectedRows: selectedRows.value,
+  batchEditableColumns: batchEditableColumns,
+  selectedRows: selectedRows,
   confirmDelete: props.confirmDelete,
   rules: props.rules
 }, emitAny)

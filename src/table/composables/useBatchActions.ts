@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, type Ref } from 'vue'
 import type { Column } from '../../types/table'
 import type { Field } from '../../types/field'
 import type { TableCrudApi, Rules } from '../../types/table'
@@ -26,8 +26,8 @@ import { validateField } from '../utils/validate'
 interface UseBatchActionsProps {
   api?: TableCrudApi              // CRUD API 接口对象
   rowKey?: string                 // 行唯一标识字段（用于构建 ID 列表）
-  batchEditableColumns: Column[]   // 可批量编辑的列列表
-  selectedRows: any[]             // 当前选中的行列表
+  batchEditableColumns: Ref<Column[]>   // 可批量编辑的列列表
+  selectedRows: Ref<any[]>             // 当前选中的行列表
   confirmDelete?: boolean         // 删除是否需要确认弹窗
   rules?: Rules                   // 表单验证规则
 }
@@ -104,7 +104,7 @@ export function useBatchActions(props: UseBatchActionsProps, emit: (event: strin
     
     // 获取选中行的 ID 列表
     const key = props.rowKey || 'id'
-    const ids = props.selectedRows.map((row: any) => row[key])
+    const ids = props.selectedRows.value.map((row: any) => row[key])
     
     if (props.api?.batchUpdateField) {
       // API 模式：调用批量更新接口
@@ -119,7 +119,7 @@ export function useBatchActions(props: UseBatchActionsProps, emit: (event: strin
     } else {
       // 事件模式：触发 batch-edit 事件，由父组件处理
       emit('batch-edit', {
-        rows: props.selectedRows,
+        rows: props.selectedRows.value,
         ids,
         field: col.prop,
         value: batchEditValue.value
@@ -139,7 +139,7 @@ export function useBatchActions(props: UseBatchActionsProps, emit: (event: strin
   const handleBatchDelete = async (doLoad: () => Promise<void>, setLoading: (val: boolean) => void) => {
     // 获取选中行的 ID 列表
     const key = props.rowKey || 'id'
-    const ids = props.selectedRows.map((row: any) => row[key])
+    const ids = props.selectedRows.value.map((row: any) => row[key])
 
     try {
       // 如果需要确认弹窗，弹出确认对话框
@@ -164,7 +164,7 @@ export function useBatchActions(props: UseBatchActionsProps, emit: (event: strin
         await doLoad()
       } else {
         // 事件模式：触发 batch-delete 事件，由父组件处理
-        emit('batch-delete', props.selectedRows)
+        emit('batch-delete', props.selectedRows.value)
       }
     } catch {
       // 用户取消或关闭对话框，不做任何操作
